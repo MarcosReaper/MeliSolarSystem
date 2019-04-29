@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.mercadolibre.solarsystem.utils.MathUtil;
+
 @Entity
 public class Planet {
 	
@@ -17,6 +19,8 @@ public class Planet {
 	private Integer daysOfTheYear;
 	@Column
 	private Boolean clockwise;
+	@Column
+	private Integer velocityInDegrees;
 	
 	public Integer getId() {
 		return id;
@@ -48,4 +52,23 @@ public class Planet {
 	public void setClockwise(Boolean clockwise) {
 		this.clockwise = clockwise;
 	}
+	public Integer getVelocityInDegrees() {
+		return velocityInDegrees;
+	}
+	public void setVelocityInDegrees(Integer velocityInDegrees) {
+		this.velocityInDegrees = velocityInDegrees;
+	}
+	
+	public Integer calculatePositionInDegress(Integer day) {
+		Integer degrees = 0;
+		Integer auxDay = new Integer(day);
+		if(day > this.daysOfTheYear) {
+			auxDay = MathUtil.restYearsFromDays(auxDay,this.daysOfTheYear);
+			degrees = auxDay * this.velocityInDegrees;
+		}else {
+			degrees = auxDay * this.velocityInDegrees;
+		}
+		return degrees;
+	}
+	
 }

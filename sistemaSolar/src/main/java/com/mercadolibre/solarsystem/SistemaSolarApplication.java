@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @ComponentScan({"com.mercadolibre.solarsystem.repository","com.mercadolibre.solarsystem.model"})
 @EnableTransactionManagement
-@EnableJpaRepositories("com.mercadolibre.solarsystem.repository")
+@EnableJpaRepositories(basePackages="com.mercadolibre.solarsystem.repository")
 public class SistemaSolarApplication {
 
 	public static void main(String[] args) {

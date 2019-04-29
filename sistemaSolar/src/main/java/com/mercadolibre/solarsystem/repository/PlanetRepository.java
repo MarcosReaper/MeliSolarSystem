@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlanetRepository extends CrudRepository <Planet, Integer> {
-
+	Planet findByName(String name);
 }

@@ -1,5 +1,6 @@
 package com.mercadolibre.solarsystem.endpoint;
 
-public class SolarSystemEndpoint {
-
+public interface SolarSystemEndpoint {
+	static final String BASE = "/weather";
+	static final String GET_WEATHER = "{planet}/clima";
 }

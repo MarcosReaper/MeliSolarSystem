@@ -5,18 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.mercadolibre.solarsystem.SistemaSolarApplicationTests;
-import com.mercadolibre.solarsystem.config.H2TestProfileJPAConfig;
 import com.mercadolibre.solarsystem.model.Planet;
 
+@DataJpaTest
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {
-		SistemaSolarApplicationTests.class, 
-  H2TestProfileJPAConfig.class})
-public class PlanetRepositoryTest {
+public class PlanetRepositoryTest { 
 	
 	@Autowired
 	private PlanetRepository planetRepository;

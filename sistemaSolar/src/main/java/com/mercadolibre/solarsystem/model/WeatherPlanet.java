@@ -45,14 +45,6 @@ public class WeatherPlanet {
 		this.day = day;
 	}
 
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
-	}
-
 	public Weather getWeather() {
 		return weather;
 	}
@@ -68,5 +60,26 @@ public class WeatherPlanet {
 	public void setPlanet(Planet planet) {
 		this.planet = planet;
 	}
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	@Override
+	public String toString() {
+		if(weather!=null && planet!=null) {
+			return "WeatherPlanet [id=" + id + ", day=" + day + ", year=" + year + ", weather=" + weather.getDescription() + ", planet="
+					+ planet.getName() + "]";
+		}else {
+			return "WeatherPlanet [id=" + id + ", day=" + day + ", year=" + year + ", weather=" + weather + ", planet="
+					+ planet + "]";
+		}
+		
+	}
+	
 	
 }

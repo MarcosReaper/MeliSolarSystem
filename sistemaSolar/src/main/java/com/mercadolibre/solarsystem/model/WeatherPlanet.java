@@ -3,16 +3,13 @@ package com.mercadolibre.solarsystem.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
 public class WeatherPlanet {
 	
 	@Id
-	@GeneratedValue
 	private Long id;
 	
 	@Column
@@ -22,11 +19,9 @@ public class WeatherPlanet {
 	private Integer year;
 
 	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(insertable = false, updatable = false)
 	private Weather weather;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(insertable = false, updatable = false)
 	private Planet planet;
 
 	public Long getId() {

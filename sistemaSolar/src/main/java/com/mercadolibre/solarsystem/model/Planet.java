@@ -1,5 +1,8 @@
 package com.mercadolibre.solarsystem.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -59,7 +62,7 @@ public class Planet {
 		this.velocityInDegrees = velocityInDegrees;
 	}
 	
-	public Integer calculatePositionInDegress(Integer days) {
+	public Double calculateDegressOfPosition(Integer days) {
 		Integer degrees = 0;
 		Integer auxDay = new Integer(days);
 		if(auxDay > this.daysOfTheYear) {
@@ -71,7 +74,19 @@ public class Planet {
 		if(!this.clockwise) {
 			degrees = 360 - degrees;
 		}
-		return degrees;
+		return Math.toRadians(degrees);
+	}
+	
+	public Double calculateXPosition(Integer days) {
+		Double xPositions = 0D;
+		xPositions =  new BigDecimal(this.distanceOfTheSun * Math.cos(this.calculateDegressOfPosition(days))).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+		return xPositions;
+	}
+	
+	public Double calculateYPosition(Integer days) {
+		Double yPositions = 0D;
+		yPositions = new BigDecimal(this.distanceOfTheSun * Math.sin(this.calculateDegressOfPosition(days))).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+		return yPositions;
 	}
 	
 	public Integer getDayOfTheYear(Integer days) {
@@ -81,8 +96,9 @@ public class Planet {
 	
 	public Integer getYear(Integer days) {
 		Integer years = 0;
-		if(days > this.daysOfTheYear) {
-			years = days / this.daysOfTheYear;
+		
+		if(days > this.daysOfTheYear && !days.equals(0)) {
+			years = new Integer(days) / this.daysOfTheYear;
 		}
 		return years;
 	}

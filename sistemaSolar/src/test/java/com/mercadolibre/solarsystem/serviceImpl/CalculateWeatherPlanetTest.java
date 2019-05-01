@@ -48,8 +48,7 @@ public class CalculateWeatherPlanetTest {
 	private List<WeatherPlanet> generateWeather(Integer day) {
 		List<WeatherPlanet> weatherPlanetList = new ArrayList<>();
 		
-		Weather weather = calculateWeather(ferengi.calculatePositionInDegress(day),
-				betasoide.calculatePositionInDegress(day), vulcano.calculatePositionInDegress(day));
+		Weather weather = calculateWeather(day,ferengi,	betasoide, vulcano);
 		
 		WeatherPlanet weatherPlanetFerengi = new WeatherPlanet();
 		weatherPlanetFerengi.setDay(ferengi.getDayOfTheYear(day));
@@ -79,26 +78,73 @@ public class CalculateWeatherPlanetTest {
 		return weatherPlanetList;
 	}
 
-	private Weather calculateWeather(Integer degreesOfFirstPlanet, 
-			Integer degreesOfSecondPlanet, Integer degreesOfThirdPlanet) {
-		Weather weather = null;
+	private Weather calculateWeather(Integer day, Planet planet1, 
+			Planet planet2, Planet planet3) {
 		
-		if(isDrought(degreesOfFirstPlanet,degreesOfSecondPlanet,degreesOfThirdPlanet)) {
+		Weather weather = null;
+		if(isDrought(day, planet1,planet2,planet3)) {
 			weather = new Weather();
 			weather.setId(1);
 			weather.setDescription("Sequia");
+		} else if(isRainfall(day, planet1,planet2,planet3)) {
+			weather = new Weather();
+			weather.setId(2);
+			weather.setDescription("Precipitaciones");
+		} else if(isOptimalConditions(day, planet1,planet2,planet3)) {
+			weather = new Weather();
+			weather.setId(3);
+			weather.setDescription("Condiciones Optimas");
+//		} else { 
+//			weather = new Weather();
+//			weather.setId(3);
+//			weather.setDescription("Indefinido");
 		}
+		
 		return weather;
 	}
 
-	private boolean isDrought(Integer degreesOfFirstPlanet, 
-			Integer degreesOfSecondPlanet, Integer degreesOfThirdPlanet) {
+	private Boolean isRainfall(Integer day, Planet planet1, Planet planet2, Planet planet3) {
 		
-		return (degreesOfFirstPlanet.equals(degreesOfSecondPlanet) && degreesOfSecondPlanet.equals(degreesOfThirdPlanet)) ||
-				(MathUtil.isOppositeDegree(degreesOfFirstPlanet, degreesOfSecondPlanet) 
-						&& degreesOfFirstPlanet.equals(degreesOfThirdPlanet) || MathUtil.isOppositeDegree(degreesOfFirstPlanet, degreesOfThirdPlanet) 
-						&& degreesOfFirstPlanet.equals(degreesOfSecondPlanet) || MathUtil.isOppositeDegree(degreesOfFirstPlanet, degreesOfThirdPlanet)
-						&& degreesOfThirdPlanet.equals(degreesOfSecondPlanet));
+		Double triangleArea = MathUtil.area(planet1.calculateXPosition(day), planet1.calculateYPosition(day), 
+				planet2.calculateXPosition(day), planet2.calculateYPosition(day), 
+				planet3.calculateXPosition(day), planet3.calculateYPosition(day)); 
+		
+		Double triangleAreaSunWithPlanet2AndPlanet3 = MathUtil.area(0D, 0D, 
+				planet2.calculateXPosition(day), planet2.calculateYPosition(day), 
+				planet3.calculateXPosition(day), planet3.calculateYPosition(day));
+		
+		Double triangleAreaSunWithPlanet1AndPlanet3 = MathUtil.area(planet1.calculateXPosition(day), planet1.calculateYPosition(day), 
+				0D, 0D,	planet3.calculateXPosition(day), planet3.calculateYPosition(day));
+		
+		Double triangleAreaSunWithPlanet1AndPlanet2 = MathUtil.area(planet1.calculateXPosition(day), planet1.calculateYPosition(day), 
+				planet2.calculateXPosition(day), planet2.calculateYPosition(day), 0D, 0D);
+		
+		return (triangleArea == triangleAreaSunWithPlanet2AndPlanet3 + triangleAreaSunWithPlanet1AndPlanet3 + triangleAreaSunWithPlanet1AndPlanet2);
+	}
+
+	private Boolean isOptimalConditions(Integer day, Planet planet1, Planet planet2, Planet planet3) {
+		
+		Boolean isDroughtPlanets= false;
+		isDroughtPlanets = MathUtil.areDotsAlligned(planet1.calculateXPosition(day), planet1.calculateYPosition(day), 
+				planet2.calculateXPosition(day), planet2.calculateYPosition(day), 
+				planet3.calculateXPosition(day), planet3.calculateYPosition(day));
+		
+		return isDroughtPlanets;
+	}
+
+	private boolean isDrought(Integer day,Planet planet1, Planet planet2, Planet planet3) {
+		
+		Boolean isDroughtPlanets= false;
+		isDroughtPlanets = MathUtil.areDotsAlligned(planet1.calculateXPosition(day), planet1.calculateYPosition(day), 
+				planet2.calculateXPosition(day), planet2.calculateYPosition(day), 
+				planet3.calculateXPosition(day), planet3.calculateYPosition(day));
+		
+		Boolean isDroughtSun= false;
+		isDroughtSun = MathUtil.areDotsAlligned(planet1.calculateXPosition(day), planet1.calculateYPosition(day), 
+				planet2.calculateXPosition(day), planet2.calculateYPosition(day), 
+				planet3.calculateXPosition(0), planet3.calculateYPosition(0));
+		
+		return (isDroughtPlanets.equals(isDroughtSun) && isDroughtPlanets.equals(true));
 	}
 
 	private Planet buildBetasoidePlanet() {

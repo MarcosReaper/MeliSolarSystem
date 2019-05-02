@@ -39,7 +39,7 @@ public class GenerateWeatherForecastBatch implements Tasklet{
 		init();
 		for(Integer i=0;i<=daysOfCalculate;i++) {
 			LOGGER.info("Dia: " + i);
-			weatherPlanetList.addAll(generateWeather(i));
+			weatherPlanetList.addAll(generateWeatherPlanet(i));
 		}
 		
 		weatherPlanetService.saveAll(weatherPlanetList);
@@ -54,7 +54,7 @@ public class GenerateWeatherForecastBatch implements Tasklet{
 		weatherPlanetList = new ArrayList<>();
 	}
 	
-	private List<WeatherPlanet> generateWeather(Integer day) {
+	private List<WeatherPlanet> generateWeatherPlanet(Integer day) {
 		Integer auxDay = new Integer(day);
 		List<WeatherPlanet> weatherPlanetList = new ArrayList<>();
 		
@@ -69,7 +69,6 @@ public class GenerateWeatherForecastBatch implements Tasklet{
 				
 				WeatherPlanet weatherPlanet = new WeatherPlanet();
 				weatherPlanet.setDay(auxDay);
-				weatherPlanet.setYear(0);
 				weatherPlanet.setWeather(weather);
 				weatherPlanet.setPlanet(planet);
 				weatherPlanet.setId(Long.valueOf(planet.getId().toString()+ auxDay));
@@ -95,9 +94,9 @@ public class GenerateWeatherForecastBatch implements Tasklet{
 		} else if(isOptimalConditions(day,planets)) {
 			LOGGER.info("    Condiciones Optimas");
 			weather = new Weather(WeatherEnum.OPTIMAL_CONDITIONS.getId());
-//		} else { 
-//			LOGGER.info("    Indefinido");
-//			weather = new Weather(WeatherEnum.UNDEFINED.getId());
+		} else { 
+			LOGGER.info("    Indefinido");
+			weather = new Weather(WeatherEnum.UNDEFINED.getId());
 		}
 		
 		return weather;
@@ -147,8 +146,7 @@ public class GenerateWeatherForecastBatch implements Tasklet{
 			
 			Boolean isDroughtSun= false;
 			isDroughtSun = MathUtil.areDotsAlligned(planets.get(0).calculateXPosition(day), planets.get(0).calculateYPosition(day), 
-					planets.get(1).calculateXPosition(day), planets.get(1).calculateYPosition(day), 
-					planets.get(2).calculateXPosition(0), planets.get(2).calculateYPosition(0));
+					planets.get(1).calculateXPosition(day), planets.get(1).calculateYPosition(day), 0D, 0D); //sunPosition
 			
 			condition =  (isDroughtPlanets.equals(isDroughtSun) && isDroughtPlanets.equals(true));
 		}

@@ -15,9 +15,6 @@ public class WeatherPlanet {
 	@Column
 	private Integer day;
 	
-	@Column
-	private Integer year;
-
 	@OneToOne(fetch = FetchType.LAZY)
 	private Weather weather;
 	
@@ -56,25 +53,37 @@ public class WeatherPlanet {
 		this.planet = planet;
 	}
 
-	public Integer getYear() {
-		return year;
-	}
-
-	public void setYear(Integer year) {
-		this.year = year;
+	@Override
+	public String toString() {
+		if(weather!=null && planet !=null ) {
+			return "WeatherPlanet [id=" + id + ", day=" + day + ", weather=" + weather.getDescription() + ", planet=" + planet.getName() + "]";
+		}
+		return "WeatherPlanet [id=" + id + ", day=" + day + ", weather=" + weather + ", planet=" + planet + "]";
 	}
 
 	@Override
-	public String toString() {
-		if(weather!=null && planet!=null) {
-			return "WeatherPlanet [id=" + id + ", day=" + day + ", year=" + year + ", weather=" + weather.getDescription() + ", planet="
-					+ planet.getName() + "]";
-		}else {
-			return "WeatherPlanet [id=" + id + ", day=" + day + ", year=" + year + ", weather=" + weather + ", planet="
-					+ planet + "]";
-		}
-		
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		WeatherPlanet other = (WeatherPlanet) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 	
 }

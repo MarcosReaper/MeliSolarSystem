@@ -3,7 +3,7 @@ package com.mercadolibre.solarsystem.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mercadolibre.solarsystem.dto.weatherPlanetResponseDTO;
+import com.mercadolibre.solarsystem.dto.WeatherPlanetResponseDTO;
 import com.mercadolibre.solarsystem.model.Planet;
 import com.mercadolibre.solarsystem.model.WeatherPlanet;
 import com.mercadolibre.solarsystem.repository.WeatherPlanetRepository;
@@ -20,13 +20,15 @@ public class WeatherPlanetServiceImpl implements WeatherPlanetService{
 	PlanetService planetService;
 
 	@Override
-	public weatherPlanetResponseDTO getWeatherByDayAndPlanetName(Integer day, String planetName) {
+	public WeatherPlanetResponseDTO getWeatherByDayAndPlanetName(Integer day, String planetName) {
 		
-		weatherPlanetResponseDTO dto = new weatherPlanetResponseDTO();
+		WeatherPlanetResponseDTO dto = new WeatherPlanetResponseDTO();
 		dto.setDay(day);
 		Planet planet = planetService.findByName(planetName);
 		WeatherPlanet weatherPlanet = WeatherPlanetRepository.findByDayAndPlanet_id(day, planet.getId());
-		dto.setWeather(weatherPlanet.getWeather().getDescription());
+		if(weatherPlanet!=null) {
+			dto.setWeather(weatherPlanet.getWeather().getDescription());
+		}
 		return dto;
 	}
 
@@ -40,6 +42,11 @@ public class WeatherPlanetServiceImpl implements WeatherPlanetService{
 	public Iterable<WeatherPlanet> saveAll(Iterable<WeatherPlanet> weatherPlanets) {
 		
 		return WeatherPlanetRepository.saveAll(weatherPlanets);
+	}
+
+	@Override
+	public Long countByWeatherId(Integer id) {
+		return WeatherPlanetRepository.countByWeather_id(id);
 	}
 
 }

@@ -3,22 +3,26 @@ package com.mercadolibre.solarsystem.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mercadolibre.solarsystem.model.Planet;
 import com.mercadolibre.solarsystem.model.WeatherPlanet;
 import com.mercadolibre.solarsystem.utils.MathUtil;
 
+@DataJpaTest
 @RunWith(SpringRunner.class)
+@ComponentScan(basePackages = {"com.mercadolibre.solarsystem.service"})
 public class weatherTest {
 	
 	private Planet vulcano;
 	private Planet ferengi;
 	private Planet betasoide;
-	private Integer daysOfCalculate;
 	List<WeatherPlanet> weatherPlanetList;
 	
 	@Before
@@ -27,21 +31,18 @@ public class weatherTest {
 		betasoide = buildBetasoidePlanet();
 		ferengi = buildFerengiPlanet();
 		vulcano = buildVulcanoPlanet();
-		daysOfCalculate = 1200;
 		weatherPlanetList = new ArrayList<>();
 	}
 
 	@Test
-	public void alingDots() {
-		Integer days = 0;
-		
+	public void isDrought() {
+		Integer days = 1;
 		while(!MathUtil.areDotsAlligned(ferengi.calculateXPosition(days), ferengi.calculateYPosition(days), 
 				 betasoide.calculateXPosition(days), betasoide.calculateYPosition(days), 
 					vulcano.calculateXPosition(days), vulcano.calculateYPosition(days))) {
 			days++;
-			System.out.println(days);
 		}
-		System.out.println(" --EXITO-- " + days);
+		Assert.assertTrue(days.equals(90));
 	}
 	
 	

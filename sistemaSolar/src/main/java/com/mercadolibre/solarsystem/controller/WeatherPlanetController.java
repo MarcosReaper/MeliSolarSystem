@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mercadolibre.solarsystem.dto.weatherPlanetResponseDTO;
+import com.mercadolibre.solarsystem.dto.WeatherPlanetResponseDTO;
 import com.mercadolibre.solarsystem.endpoint.SolarSystemEndpoint;
 import com.mercadolibre.solarsystem.exception.ApiException;
 import com.mercadolibre.solarsystem.exception.WeatherFormatException;
 import com.mercadolibre.solarsystem.service.WeatherPlanetService;
+import com.mercadolibre.solarsystem.service.WeatherService;
 import com.mercadolibre.solarsystem.validator.WeatherPlanetValidator;
 
 @RestController
@@ -21,9 +22,12 @@ public class WeatherPlanetController {
 	
 		@Autowired
 		WeatherPlanetService weatherPlanetService;
+		
+		@Autowired
+		WeatherService weatherService;
 
 		@GetMapping(value=SolarSystemEndpoint.GET_WEATHER)
-		public ResponseEntity<weatherPlanetResponseDTO> getWeather(@PathVariable String planet, @RequestParam String day) throws ApiException{
+		public ResponseEntity<WeatherPlanetResponseDTO> getWeather(@PathVariable String planet, @RequestParam String day) throws ApiException{
 			
 			if(!WeatherPlanetValidator.validatePlanet(planet) && !WeatherPlanetValidator.validateDay(day)){
 				throw new WeatherFormatException();
@@ -31,8 +35,5 @@ public class WeatherPlanetController {
 			
 			return ResponseEntity.ok(weatherPlanetService.getWeatherByDayAndPlanetName(Integer.parseInt(day), planet));
 		}
-
-	
-		
 		
 }

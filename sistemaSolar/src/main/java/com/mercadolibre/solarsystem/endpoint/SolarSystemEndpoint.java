@@ -2,5 +2,5 @@ package com.mercadolibre.solarsystem.endpoint;
 
 public interface SolarSystemEndpoint {
 	static final String BASE = "/";
-	static final String GET_WEATHER = "{planet}/clima";
+	static final String GET_WEATHER = "{planet}/weather";
 }

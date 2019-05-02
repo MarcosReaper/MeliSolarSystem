@@ -1,6 +1,6 @@
 package com.mercadolibre.solarsystem.dto;
 
-public class weatherPlanetResponseDTO {
+public class WeatherPlanetResponseDTO {
 	
 	private Integer day;
 	private String weather;

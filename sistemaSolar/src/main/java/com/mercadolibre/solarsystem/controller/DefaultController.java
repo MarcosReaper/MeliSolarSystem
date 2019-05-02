@@ -9,6 +9,7 @@ public class DefaultController {
 
 	@GetMapping(value="/")
 	public ResponseEntity<String> defaultPath(){
-		return ResponseEntity.ok("default page");
+		return ResponseEntity.ok("URL: localhost:8080/'PLANET_NAME'/weather?day='DAY'  "
+				+ " -----  Planets: Ferengi - Betasoide - Vulcano");
 	}
 }

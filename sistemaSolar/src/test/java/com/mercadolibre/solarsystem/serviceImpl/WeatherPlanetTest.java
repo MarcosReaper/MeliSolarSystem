@@ -63,6 +63,11 @@ public class WeatherPlanetTest {
 		Assert.assertTrue(weatherPlanet.equals(weatherPlanetList.get(0)));
 	}
 	
+	@Test
+	public void howManyPeriodsOfDrought() {
+		weatherPlanetService.countByWeatherId(id);
+	}
+	
 	private List<WeatherPlanet> generateWeather(Integer day) {
 		List<WeatherPlanet> weatherPlanetList = new ArrayList<>();
 		

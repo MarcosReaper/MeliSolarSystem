@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import com.mercadolibre.solarsystem.batch.tasks.GenerateWeatherForecastBatch;
 import com.mercadolibre.solarsystem.service.PlanetService;
 import com.mercadolibre.solarsystem.service.WeatherPlanetService;
+import com.mercadolibre.solarsystem.service.WeatherService;
 
 @Configuration
 @EnableBatchProcessing
@@ -26,6 +27,9 @@ public class BatchConfig {
     
     @Autowired
     private PlanetService planetService;
+    
+    @Autowired
+	private WeatherService weatherService;
     
     @Autowired
 	private WeatherPlanetService weatherPlanetService;
@@ -47,6 +51,6 @@ public class BatchConfig {
     
     @Bean
     public GenerateWeatherForecastBatch generateWeatherForecastBatch(){
-        return new GenerateWeatherForecastBatch(planetService, weatherPlanetService);
+        return new GenerateWeatherForecastBatch(planetService, weatherPlanetService, weatherService);
     }
 }

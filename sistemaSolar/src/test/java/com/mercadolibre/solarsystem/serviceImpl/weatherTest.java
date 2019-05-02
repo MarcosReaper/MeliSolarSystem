@@ -1,19 +1,19 @@
 package com.mercadolibre.solarsystem.serviceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mercadolibre.solarsystem.model.Planet;
-import com.mercadolibre.solarsystem.model.WeatherPlanet;
-import com.mercadolibre.solarsystem.utils.MathUtil;
+import com.mercadolibre.solarsystem.service.PlanetService;
+import com.mercadolibre.solarsystem.service.WeatherService;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
@@ -23,7 +23,12 @@ public class weatherTest {
 	private Planet vulcano;
 	private Planet ferengi;
 	private Planet betasoide;
-	List<WeatherPlanet> weatherPlanetList;
+	
+	@Autowired
+	PlanetService planetService;
+	
+	@Autowired
+	WeatherService weatherService;
 	
 	@Before
 	public void buildPlanets() {
@@ -31,18 +36,20 @@ public class weatherTest {
 		betasoide = buildBetasoidePlanet();
 		ferengi = buildFerengiPlanet();
 		vulcano = buildVulcanoPlanet();
-		weatherPlanetList = new ArrayList<>();
 	}
 
 	@Test
 	public void isDrought() {
-		Integer days = 1;
-		while(!MathUtil.areDotsAlligned(ferengi.calculateXPosition(days), ferengi.calculateYPosition(days), 
-				 betasoide.calculateXPosition(days), betasoide.calculateYPosition(days), 
-					vulcano.calculateXPosition(days), vulcano.calculateYPosition(days))) {
-			days++;
-		}
-		Assert.assertTrue(days.equals(90));
+		Integer day = 90;
+		List<Planet> planets = planetService.findAll();
+		Assert.assertTrue(weatherService.isDrought(day, planets));
+	}
+	
+	@Test
+	public void isRainFall() {
+		Integer day = 104;
+		List<Planet> planets = planetService.findAll();
+		Assert.assertTrue(weatherService.isRainfall(day, planets));
 	}
 	
 	
